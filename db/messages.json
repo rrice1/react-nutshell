@@ -1,0 +1,14 @@
+{
+  "message1": {
+    "uid": "vCP1SJfbv3S3GCGxc5Zr49fWaT22",
+    "message": "What's up?",
+    "timestamp": 1528763298535,
+    "isEdited": false
+  },
+  "message2": {
+    "uid": "67890",
+    "message": "The Sky",
+    "timestamp": 1528763298536,
+    "isEdited": true
+  }
+} 
