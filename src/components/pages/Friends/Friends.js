@@ -2,40 +2,76 @@ import React from 'react';
 import './Friends.scss';
 import smashRequests from '../../../Helpers/data/smashRequests';
 import authRequests from '../../../Helpers/data/authRequests';
-import userRequests from '../../../Helpers/data/userRequests';
+import FriendItem from './FriendItems/FriendItems';
+import friendRequests from '../../../Helpers/data/friendRequests';
 
 class Friends extends React.Component {
 state = {
-  users: [],
-  uid: '',
+  confirmed: [],
   pending: [],
-  friends: [],
   potentials: [],
 }
 
 componentDidMount() { // behind the scenes
-  smashRequests
-    .usersAndFriends(authRequests.getCurrentUid())
-    .then((users) => {
-      console.log(users);
-      // this.setState(users);
-    })
-    .catch(error => console.error('stuff broke', error));
+  this.getAndSortUsers();
 }
 
-render() { // stuff on the page
+getAndSortUsers = () => {
+  const uid = authRequests.getCurrentUid();
+  smashRequests
+    .usersAndFriends(uid)
+    .then((results) => {
+      const users = results;
+      const potentials = users.filter(user => !user.isAccepted && !user.isPending);
+      const pending = users.filter(user => !user.isAccepted && user.isPending);
+      const confirmed = users.filter(user => user.isAccepted);
+      this.setState({
+        users,
+        potentials,
+        pending,
+        confirmed,
+      });
+    })
+    .catch(err => console.error('error in SMASH', err));
+}
+
+render() {
+  const {
+    potentials,
+    pending,
+    confirmed,
+  } = this.state;
+
+  const friendItemComponents = (friendArray, status) => (
+    friendArray.map(friend => (
+      <FriendItem
+        key={friend.id}
+        friend={friend}
+        status={status}
+      />
+    ))
+  );
+
   return (
-      <div className='row'>
-      <div className='col-4'>
-      <h2>Undiscovered Friends</h2>
+    <div className='Friends container'>
+      <h2>Friends</h2>
+      <div className="container">
+        <div className="row">
+          <div className="col-sm">
+            <h3>Potential Friends</h3>
+            <ul>{friendItemComponents(potentials)}</ul>
+          </div>
+          <div className="col-sm">
+            <h3>Pending Requests</h3>
+            <ul>{friendItemComponents(pending)}</ul>
+          </div>
+          <div className="col-sm">
+            <h3>Friends</h3>
+            <ul>{friendItemComponents(confirmed)}</ul>
+          </div>
+        </div>
       </div>
-      <div className='col-4'>
-      <h2>Pending Requests</h2>
-      </div>
-      <div className='col-4'>
-      <h2>My Friends</h2>
-      </div>
-      </div>
+    </div>
   );
 }
 }
