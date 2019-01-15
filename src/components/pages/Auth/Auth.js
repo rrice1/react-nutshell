@@ -4,11 +4,23 @@ import authRequests from '../../../Helpers/data/authRequests';
 import './Auth.scss';
 
 import googleButton from './images/googlebutton.png';
+import userRequests from '../../../Helpers/data/userRequests';
 
 class Auth extends React.Component {
   authenticateUser = (e) => {
     e.preventDefault();
-    authRequests.authenticate().then(() => {
+    authRequests.authenticate().then((results) => {
+      userRequests.getUserByUid(results.user.uid)
+        .then((userObject) => {
+          if (!userObject) {
+            const newUserObject = {
+              userName: `${results.user.displayName}`,
+              photo: `${results.user.photoURL}`,
+              uid: `${results.user.url}`,
+            };
+            userRequests.createUser(newUserObject);
+          }
+        });
       this.props.history.push('/home');
     }).catch(err => console.error('there was an error with auth', err));
   }

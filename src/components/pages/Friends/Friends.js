@@ -18,7 +18,7 @@ componentDidMount() { // behind the scenes
     .usersAndFriends(authRequests.getCurrentUid())
     .then((users) => {
       console.log(users);
-      this.setState(users);
+      // this.setState(users);
     })
     .catch(error => console.error('stuff broke', error));
 }
