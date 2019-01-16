@@ -11,6 +11,7 @@ class FriendItem extends React.Component {
     status: PropTypes.string,
     endFriendship: PropTypes.func,
     addFriend: PropTypes.func,
+    confirmFriend: PropTypes.func,
   };
 
   deleteEvent = (e) => {
@@ -32,6 +33,13 @@ class FriendItem extends React.Component {
       uid,
     };
     addFriend(newFriend);
+  }
+
+  acceptEvent = (e) => {
+    e.preventDefault();
+    const friendId = e.target.closest('button').id;
+    const { confirmFriend } = this.props;
+    confirmFriend(friendId);
   }
 
   render() {
@@ -60,13 +68,12 @@ class FriendItem extends React.Component {
     };
 
     return (
-      <li className="friend-item" id={friend.id}>
-        <span className="col-1"><img className="photo" src={friend.photo} alt={friend.userName}/></span>
-        <span className="col-9">{friend.userName}</span>
-        <div>{makeButtons()}</div>
-      </li>
+        <li className="friend-item" id={friend.id}>
+          <span className="col-1"><img className="photo" src={friend.photo} alt={friend.userName}/></span>
+          <span className="col-9">{friend.userName}</span>
+          <div>{makeButtons()}</div>
+        </li>
     );
   }
 }
-
 export default FriendItem;
