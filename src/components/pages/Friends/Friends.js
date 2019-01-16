@@ -8,8 +8,6 @@ import friendRequests from '../../../Helpers/data/friendRequests';
 class Friends extends React.Component {
   state = {
     potentials: [],
-    confirmed: [],
-    pending: [],
   }
 
   componentDidMount() {
@@ -22,12 +20,8 @@ class Friends extends React.Component {
       .usersAndFriends(uid)
       .then((results) => {
         const potentials = results.filter(user => !user.isAccepted && !user.isPending);
-        const pending = results.filter(user => !user.isAccepted && user.isPending);
-        const confirmed = results.filter(user => user.isAccepted);
         this.setState({
           potentials,
-          pending,
-          confirmed,
         });
       })
       .catch(err => console.error('error in SMASH', err));
@@ -49,19 +43,9 @@ class Friends extends React.Component {
       .catch(err => console.error('error in adding friend', err));
   }
 
-  confirmFriend = (friendId) => {
-    friendRequests.acceptFriendship(friendId)
-      .then(() => {
-        this.getAndSortUsers();
-      })
-      .catch(err => console.error('error in confirming friendship', err));
-  }
-
   render() {
     const {
       potentials,
-      pending,
-      confirmed,
     } = this.state;
 
     const friendItemComponents = (friendArray, status) => (
@@ -72,7 +56,6 @@ class Friends extends React.Component {
           status={status}
           endFriendship={this.endFriendship}
           addFriend={this.addFriend}
-          confirmFriend={this.confirmFriend}
         />
       ))
     );
@@ -85,14 +68,6 @@ class Friends extends React.Component {
             <div className="col-sm">
               <h3>Potential Friends</h3>
               <ul>{friendItemComponents(potentials, 'potentials')}</ul>
-            </div>
-            <div className="col-sm">
-              <h3>Pending Requests</h3>
-              <ul>{friendItemComponents(pending, 'pending')}</ul>
-            </div>
-            <div className="col-sm">
-              <h3>Friends</h3>
-              <ul>{friendItemComponents(confirmed, 'confirmed')}</ul>
             </div>
           </div>
         </div>
