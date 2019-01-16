@@ -3,7 +3,6 @@ import './Friends.scss';
 import smashRequests from '../../../Helpers/data/smashRequests';
 import authRequests from '../../../Helpers/data/authRequests';
 import FriendItem from './FriendItems/FriendItems';
-import friendRequests from '../../../Helpers/data/friendRequests';
 
 class Friends extends React.Component {
 state = {
