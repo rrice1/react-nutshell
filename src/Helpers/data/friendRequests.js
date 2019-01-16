@@ -23,7 +23,7 @@ const getAllFriends = () => new Promise((resolve, reject) => {
 
 const addFriend = newFriend => axios.post(`${firebaseUrl}/friends.json`, newFriend);
 
-const deleteFriend = friendRequestId => axios.delete(`${firebaseUrl}/friends/${friendRequestId}.json`);
+const deleteFriend = friendId => axios.delete(`${firebaseUrl}/friends/${friendId}.json`);
 
 const acceptFriendship = friendId => axios.patch(`${firebaseUrl}/friends/${friendId}.json`, { isAccepted: true, isPending: false });
 

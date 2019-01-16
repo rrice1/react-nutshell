@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import friendShape from '../../../../Helpers/props/friendShape';
 import { Button } from 'reactstrap';
+import friendShape from '../../../../Helpers/props/friendShape';
 import './FriendItems.scss';
 
 class FriendItem extends React.Component {
@@ -13,7 +13,7 @@ class FriendItem extends React.Component {
 
   deleteEvent = (e) => {
     e.preventDefault();
-    const friendRequestId = e.target.id;
+    const friendRequestId = e.target.closest('button').id;
     const { endFriendship } = this.props;
     endFriendship(friendRequestId);
   }
