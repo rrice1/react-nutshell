@@ -35,6 +35,14 @@ getAndSortUsers = () => {
     .catch(err => console.error('error in SMASH', err));
 }
 
+endFriendship = (friendRequestId) => {
+  friendRequests.deleteFriend(friendRequestId)
+    .then(() => {
+      this.getAndSortUsers();
+    })
+    .catch(err => console.error('error in ending friendship', err));
+}
+
 render() {
   const {
     potentials,
@@ -48,6 +56,7 @@ render() {
         key={friend.id}
         friend={friend}
         status={status}
+        endFriendship={this.endFriendship}
       />
     ))
   );
