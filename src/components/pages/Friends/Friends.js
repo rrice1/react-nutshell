@@ -68,15 +68,15 @@ render() {
         <div className="row">
           <div className="col-sm">
             <h3>Potential Friends</h3>
-            <ul>{friendItemComponents(potentials)}</ul>
+            <ul>{friendItemComponents(potentials, 'potentials')}</ul>
           </div>
           <div className="col-sm">
             <h3>Pending Requests</h3>
-            <ul>{friendItemComponents(pending)}</ul>
+            <ul>{friendItemComponents(pending, 'pending')}</ul>
           </div>
           <div className="col-sm">
             <h3>Friends</h3>
-            <ul>{friendItemComponents(confirmed)}</ul>
+            <ul>{friendItemComponents(confirmed, 'confirmed')}</ul>
           </div>
         </div>
       </div>

@@ -19,16 +19,22 @@ class FriendItem extends React.Component {
   }
 
   render() {
-    const { friend } = this.props;
+    const { friend, status } = this.props;
+    const makeButtons = () => {
+      if (status === 'confirmed') {
+        return (
+          <Button color="danger" id={friend.friendRequestId} onClick={this.deleteEvent}><i className="far fa-trash-alt"></i></Button>
+        );
+      } return '';
+    };
 
     return (
         <li className="friend-item" id={friend.id}>
           <span className="col-1"><img className="photo" src={friend.photo} alt={friend.userName}/></span>
           <span className="col-9">{friend.userName}</span>
-          <Button color="danger" id={friend.friendRequestId} onClick={this.deleteEvent}><i className="far fa-trash-alt"></i></Button>
+          <div>{makeButtons()}</div>
         </li>
     );
   }
 }
-
 export default FriendItem;
