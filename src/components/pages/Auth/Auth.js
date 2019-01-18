@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import authRequests from '../../../Helpers/data/authRequests';
 import './Auth.scss';
 
@@ -16,7 +15,7 @@ class Auth extends React.Component {
             const newUserObject = {
               userName: `${results.user.displayName}`,
               photo: `${results.user.photoURL}`,
-              uid: `${results.user.url}`,
+              uid: `${results.user.uid}`,
             };
             userRequests.createUser(newUserObject);
           }
