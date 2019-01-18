@@ -11,6 +11,7 @@ class FriendItem extends React.Component {
     status: PropTypes.string,
     endFriendship: PropTypes.func,
     addFriend: PropTypes.func,
+    confirmFriend: PropTypes.func,
   };
 
   deleteEvent = (e) => {
@@ -34,6 +35,13 @@ class FriendItem extends React.Component {
     addFriend(newFriend);
   }
 
+  acceptEvent = (e) => {
+    e.preventDefault();
+    const friendId = e.target.closest('button').id;
+    const { confirmFriend } = this.props;
+    confirmFriend(friendId);
+  }
+
   render() {
     const { friend, status } = this.props;
     const makeButtons = () => {
@@ -44,6 +52,13 @@ class FriendItem extends React.Component {
       } if (status === 'potentials') {
         return (
           <Button color="success" id={friend.uid} onClick={this.addFriendEvent}><i className="fas fa-plus"></i></Button>
+        );
+      } if (status === 'pending' && friend.friendRequest === 'them') {
+        return (
+          <div>
+            <Button color="success" id={friend.friendRequestId} onClick={this.acceptEvent}><i className="fas fa-user-check"></i></Button>
+            <Button color="danger" id={friend.friendRequestId} onClick={this.deleteEvent}><i className="far fa-trash-alt"></i></Button>
+          </div>
         );
       } return (
         <div>

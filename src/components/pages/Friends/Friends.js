@@ -8,8 +8,8 @@ import friendRequests from '../../../Helpers/data/friendRequests';
 class Friends extends React.Component {
   state = {
     potentials: [],
-    pending: [],
     confirmed: [],
+    pending: [],
   }
 
   componentDidMount() {
@@ -49,6 +49,14 @@ class Friends extends React.Component {
       .catch(err => console.error('error in adding friend', err));
   }
 
+  confirmFriend = (friendId) => {
+    friendRequests.acceptFriendship(friendId)
+      .then(() => {
+        this.getAndSortUsers();
+      })
+      .catch(err => console.error('error in confirming friendship', err));
+  }
+
   render() {
     const {
       potentials,
@@ -64,29 +72,30 @@ class Friends extends React.Component {
           status={status}
           endFriendship={this.endFriendship}
           addFriend={this.addFriend}
+          confirmFriend={this.confirmFriend}
         />
       ))
     );
 
     return (
-    <div className='Friends container'>
-      <h2>Friends</h2>
-      <div className="container">
-        <div className="row">
-          <div className="col-sm">
-            <h3>Potential Friends</h3>
-            <ul>{friendItemComponents(potentials, 'potentials')}</ul>
-          </div>
-          <div className="col-sm">
-            <h3>Pending Requests</h3>
-            <ul>{friendItemComponents(pending, 'pending')}</ul>
-          </div>
-          <div className="col-sm">
-            <h3>Friends</h3>
-            <ul>{friendItemComponents(confirmed, 'confirmed')}</ul>
+      <div className='Friends'>
+        <h2>Friends</h2>
+        <div className="container">
+          <div className="row">
+            <div className="col-sm">
+              <h3>Potential Friends</h3>
+              <ul>{friendItemComponents(potentials, 'potentials')}</ul>
+            </div>
+            <div className="col-sm">
+              <h3>Pending Requests</h3>
+              <ul>{friendItemComponents(pending, 'pending')}</ul>
+            </div>
+            <div className="col-sm">
+              <h3>Friends</h3>
+              <ul>{friendItemComponents(confirmed, 'confirmed')}</ul>
+            </div>
           </div>
         </div>
-      </div>
       </div>
     );
   }
