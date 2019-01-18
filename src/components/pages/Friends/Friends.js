@@ -6,62 +6,69 @@ import FriendItem from './FriendItems/FriendItems';
 import friendRequests from '../../../Helpers/data/friendRequests';
 
 class Friends extends React.Component {
-state = {
-  confirmed: [],
-  pending: [],
-  potentials: [],
-}
+  state = {
+    potentials: [],
+    pending: [],
+    confirmed: [],
+  }
 
-componentDidMount() { // behind the scenes
-  this.getAndSortUsers();
-}
+  componentDidMount() {
+    this.getAndSortUsers();
+  }
 
-getAndSortUsers = () => {
-  const uid = authRequests.getCurrentUid();
-  smashRequests
-    .usersAndFriends(uid)
-    .then((results) => {
-      const users = results;
-      const potentials = users.filter(user => !user.isAccepted && !user.isPending);
-      const pending = users.filter(user => !user.isAccepted && user.isPending);
-      const confirmed = users.filter(user => user.isAccepted);
-      this.setState({
-        users,
-        potentials,
-        pending,
-        confirmed,
-      });
-    })
-    .catch(err => console.error('error in SMASH', err));
-}
+  getAndSortUsers = () => {
+    const uid = authRequests.getCurrentUid();
+    smashRequests
+      .usersAndFriends(uid)
+      .then((results) => {
+        const potentials = results.filter(user => !user.isAccepted && !user.isPending);
+        const pending = results.filter(user => !user.isAccepted && user.isPending);
+        const confirmed = results.filter(user => user.isAccepted);
+        this.setState({
+          potentials,
+          pending,
+          confirmed,
+        });
+      })
+      .catch(err => console.error('error in SMASH', err));
+  }
 
-endFriendship = (friendRequestId) => {
-  friendRequests.deleteFriend(friendRequestId)
-    .then(() => {
-      this.getAndSortUsers();
-    })
-    .catch(err => console.error('error in ending friendship', err));
-}
+  endFriendship = (friendRequestId) => {
+    friendRequests.deleteFriend(friendRequestId)
+      .then(() => {
+        this.getAndSortUsers();
+      })
+      .catch(err => console.error('error in ending friendship', err));
+  }
 
-render() {
-  const {
-    potentials,
-    pending,
-    confirmed,
-  } = this.state;
+  addFriend = (newFriend) => {
+    friendRequests.addFriend(newFriend)
+      .then(() => {
+        this.getAndSortUsers();
+      })
+      .catch(err => console.error('error in adding friend', err));
+  }
 
-  const friendItemComponents = (friendArray, status) => (
-    friendArray.map(friend => (
-      <FriendItem
-        key={friend.id}
-        friend={friend}
-        status={status}
-        endFriendship={this.endFriendship}
-      />
-    ))
-  );
+  render() {
+    const {
+      potentials,
+      pending,
+      confirmed,
+    } = this.state;
 
-  return (
+    const friendItemComponents = (friendArray, status) => (
+      friendArray.map(friend => (
+        <FriendItem
+          key={friend.id}
+          friend={friend}
+          status={status}
+          endFriendship={this.endFriendship}
+          addFriend={this.addFriend}
+        />
+      ))
+    );
+
+    return (
     <div className='Friends container'>
       <h2>Friends</h2>
       <div className="container">
@@ -80,9 +87,10 @@ render() {
           </div>
         </div>
       </div>
-    </div>
-  );
+      </div>
+    );
+  }
 }
-}
+
 
 export default Friends;
