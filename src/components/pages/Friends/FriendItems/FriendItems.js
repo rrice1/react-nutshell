@@ -28,6 +28,7 @@ class FriendItem extends React.Component {
     const newFriend = {
       friendUid,
       isAccepted: false,
+      isPending: true,
       uid,
     };
     addFriend(newFriend);

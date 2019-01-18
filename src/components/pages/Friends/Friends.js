@@ -22,8 +22,12 @@ class Friends extends React.Component {
       .usersAndFriends(uid)
       .then((results) => {
         const potentials = results.filter(user => !user.isAccepted && !user.isPending);
+        const pending = results.filter(user => !user.isAccepted && user.isPending);
+        const confirmed = results.filter(user => user.isAccepted);
         this.setState({
           potentials,
+          pending,
+          confirmed,
         });
       })
       .catch(err => console.error('error in SMASH', err));
